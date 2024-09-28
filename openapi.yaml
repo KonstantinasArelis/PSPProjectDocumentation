@@ -6,7 +6,6 @@ info:
   version: 1.0.11
 tags:
   - name: order
-    description: test
   - name: employee
   - name: reservation
   - name: transaction
@@ -19,9 +18,23 @@ paths:
     put:
       tags:
         - order
-      summary: update an order
+      summary: Update an order
       requestBody:
-        description: test
+        description: An order object that is to be updated.  
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    post:
+      tags:
+        - order
+      summary: Create an order
+      requestBody:
+        description: An order object that is to be created.
         content:
           application/json:
             schema:
@@ -35,39 +48,84 @@ paths:
       parameters:
         - name: orderId
           in: path
-          description: ID of order to return
+          description: Finds a specific order by its ID
           required: true
           schema:
             type: integer
-            format: int64
       tags:
         - order
+      summary: Find order by ID
       responses:
-        '200':
+        200:
           description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    delete:
+      parameters:
+        - name: orderId
+          in: path
+          description: Deletes a specific order by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - order
+      summary: Delete order by ID
+      responses:
+        200:
+          description: Successful operation
+  /order/{OrderStatus}:
+    get:
+      parameters:
+        - name: OrderStatus
+          in: path
+          description: Finds orders with a status
+          required: true
+          schema:
+            type: string
+      tags:
+        - order
+      summary: Find orders by status
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
 components:
   schemas:
     Order:
       type: object
       properties:
-        id:
-          type: integer
+        OrderId:
+          type: number
           format: int64
           example: 10
-        creationDateTime:
+        CreationDateTime:
           type: string
           format: date-time
-        orderOwner:
-          type: integer
+        OrderOwner:
+          type: number
           format: int64
           example: 5
-        orderStatus:
+        OrderStatus:
           type: string
           example: open
-        tip:
+        Tip:
           type: number
-          format: float
           example: 6.4
-        receiptStatus:
+        ReceiptStatus:
           type: string
           example: printed
+        customerName:
+          type: string
+          example: John
+        TableName:
+          type: string
+          example: By the window
+        OrderType:
+          type: string
+          example: Dine in
