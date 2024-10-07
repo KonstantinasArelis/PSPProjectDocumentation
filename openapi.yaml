@@ -95,6 +95,190 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
+  /surcharge:
+    put:
+      tags:
+        - surcharge
+      summary: Update a surcharge
+      requestBody:
+        description: A surcharge object that is to be updated.  
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Surcharge'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    post:
+      tags:
+        - surcharge
+      summary: Create a surcharge
+      requestBody:
+        description: A surcharge object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Surcharge'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    get:
+      tags:
+        - surcharge
+      summary: Get all surcharges
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurchargeArray'
+  /surcharge/{surchargeId}:
+    get:
+      parameters:
+        - name: surchargeId
+          in: path
+          description: Finds a specific surcharge by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - surcharge
+      summary: Find surcharge by ID
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Surcharge'
+    delete:
+      parameters:
+        - name: surchargeId
+          in: path
+          description: Deletes a specific surcharge by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - surcharge
+      summary: Delete surcharge by ID
+      responses:
+        200:
+          description: Successful operation
+  /surcharge/{surchargeStatus}:
+    get:
+      parameters:
+        - name: surchargeStatus
+          in: path
+          description: Finds surcharges with a status
+          required: true
+          schema:
+            type: string
+      tags:
+        - surcharge
+      summary: Find surcharges by status
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurchargeArray'
+  /discount:
+    put:
+      tags:
+        - discount
+      summary: Update a discount
+      requestBody:
+        description: A discount object that is to be updated.  
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Discount'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    post:
+      tags:
+        - discount
+      summary: Create a discount
+      requestBody:
+        description: A discount object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Discount'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    get:
+      tags:
+        - discount
+      summary: Get all discounts
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscountArray'
+  /discount/{discountId}:
+    get:
+      parameters:
+        - name: discountId
+          in: path
+          description: Finds a specific discount by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - discount
+      summary: Find discount by ID
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Discount'
+    delete:
+      parameters:
+        - name: discountId
+          in: path
+          description: Deletes a specific discount by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - discount
+      summary: Delete discount by ID
+      responses:
+        200:
+          description: Successful operation
+  /discount/{discountStatus}:
+    get:
+      parameters:
+        - name: discountStatus
+          in: path
+          description: Finds discounts with a status
+          required: true
+          schema:
+            type: string
+      tags:
+        - discount
+      summary: Find discounts by status
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscountArray'
 components:
   schemas:
     Order:
@@ -129,3 +313,61 @@ components:
         OrderType:
           type: string
           example: Dine in
+    Surcharge:
+      type: object
+      properties:
+        SurchargeId:
+          type: number
+          format: int64
+          example: 10
+        Name:
+          type: string
+          example: surcharge1
+        Value:
+          type: number
+          example: 7.1
+        Type:
+          type: string
+          example: Percentage
+        CreationDateTime:
+          type: string
+          format: date-time
+        Status:
+          type: string
+          example: Active
+        TimeSensitive:
+          type: string
+          example: Yes
+    SurchargeArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Surcharge'
+    Discount:
+      type: object
+      properties:
+        DiscountId:
+          type: number
+          format: int64
+          example: 10
+        Name:
+          type: string
+          example: special October offer
+        Value:
+          type: number
+          example: 7.1
+        Type:
+          type: string
+          example: Percentage
+        CreationDateTime:
+          type: string
+          format: date-time
+        Status:
+          type: string
+          example: Active
+        TimeSensitive:
+          type: string
+          example: Yes
+    DiscountArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Discount'
