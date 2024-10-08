@@ -2,11 +2,12 @@ openapi: 3.0.3
 info:
   title: PlayStation Portable - OpenAPI 3.0
   description: |-
-    hmmmmm.
+    This is the API documentation for the system design course at Vilnius University. The creators team name is PlayStation Portable.
   version: 1.0.11
 tags:
   - name: order
   - name: employee
+  - name: permission
   - name: reservation
   - name: transaction
   - name: surcharge
@@ -76,6 +77,25 @@ paths:
       responses:
         200:
           description: Successful operation
+  /order/{EmployeeId}:
+    get:
+      parameters:
+        - name: EmployeeId
+          in: path
+          description: Find all orders by their owner
+          required: true
+          schema:
+            type: integer
+      tags:
+        - order
+      summary: Find all orders by their owner
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderArray'
   /order/{OrderStatus}:
     get:
       parameters:
@@ -94,7 +114,7 @@ paths:
           content: 
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/OrderArray'
   /surcharge:
     put:
       tags:
@@ -279,6 +299,149 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DiscountArray'
+  /employee/{EmployeeId}:
+    get:
+      tags:
+        - employee
+      summary: Get an employee by ID (or the permissions of that employee)
+      parameters:
+        - name: EmployeeId
+          in: path
+          description: Employee ID
+          required: true
+          schema:
+            type: integer
+        - name: include
+          in: query
+          description: Get employee permissions
+          schema:
+            type: string
+            enum: [permissions] 
+      responses:
+        '200':
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Employee' 
+                  - $ref: '#/components/schemas/PermissionArray'
+                discriminator:
+                    propertyName: permissions  # Add a discriminator
+                    mapping:
+                      true: '#/components/schemas/PermissionArray'
+                      false: '#/components/schemas/Employee'
+    delete:
+      parameters:
+        - name: EmployeeId
+          in: path
+          description: Delete employee by ID
+          required: true
+          schema:
+            type: number
+      tags:
+        - employee
+      summary: Delete an employee object by Id
+      responses:
+        200:
+          description: Successful operation
+  /employee/{Status}:
+    get:
+      parameters:
+        - name: Status
+          in: path
+          description: Find employee's by status
+          required: true
+          schema:
+            type: number
+      tags:
+        - employee
+      summary: Find employee's by status
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeArray'
+  /employee/{Organisation}:
+    get:
+      parameters:
+        - name: Organisation
+          in: path
+          description: Find employee's by organisation
+          required: true
+          schema:
+            type: number
+      tags:
+        - employee
+      summary: Find employee's by organisation
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeArray'
+  /employee:
+    post:
+      tags:
+        - employee
+      summary: Create an employee
+      requestBody:
+        description: An employee object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    put:
+      tags:
+        - employee
+      summary: Update an employee
+      requestBody:
+        description: An employee object that is to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+  /permission:
+    post:
+      tags:
+        - permission
+      summary: Assign a permission
+      requestBody:
+        description: A permission object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permission'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+  /permission/{PermissionId}:
+    delete:
+      tags:
+        - permission
+      summary: Delete a permission
+      parameters:
+        - name: PermissionId
+          in: path
+          description: Delete permission
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: Successful operation
 components:
   schemas:
     Order:
@@ -313,6 +476,91 @@ components:
         OrderType:
           type: string
           example: Dine in
+    OrderArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Order'
+    Discount:
+      type: object
+      properties:
+        DiscountId:
+          type: number
+          format: int64
+          example: 10
+        Name:
+          type: string
+          example: special October offer
+        Value:
+          type: number
+          example: 7.1
+        Type:
+          type: string
+          example: Percentage
+        CreationDateTime:
+          type: string
+          format: date-time
+        Status:
+          type: string
+          example: Active
+        TimeSensitive:
+          type: string
+          example: Yes
+    Employee:
+      type: object
+      properties:
+        EmployeeId:
+          type: number
+          format: int64
+          example: 30
+        Name:
+          type: string
+          example: John
+        Role:
+          type: string
+          example: Cook
+        CreationDateTime:
+          type: string
+          example: 20024-20-08 08:24
+        Status:
+          type: string
+          example: Active
+        Password:
+          type: string
+          example: 1234
+        Organisation:
+          type: number
+          format: int64
+          example: 50
+    EmployeeArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Employee'
+    Permission:
+      type: object
+      properties:
+        PermissionId:
+          type: number
+          format: int64
+          example: 40
+        PermissionTemplateId:
+          type: number
+          format: int64
+          example: 50
+        EmployeeId:
+          type: number
+          format: int64
+          example: 50
+        CreationDateTime:
+          type: string
+          example: 20024-20-08 08:59
+    PermissionArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Permission'
+    DiscountArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Discount'
     Surcharge:
       type: object
       properties:
@@ -342,32 +590,3 @@ components:
       type: array
       items: 
         $ref: '#/components/schemas/Surcharge'
-    Discount:
-      type: object
-      properties:
-        DiscountId:
-          type: number
-          format: int64
-          example: 10
-        Name:
-          type: string
-          example: special October offer
-        Value:
-          type: number
-          example: 7.1
-        Type:
-          type: string
-          example: Percentage
-        CreationDateTime:
-          type: string
-          format: date-time
-        Status:
-          type: string
-          example: Active
-        TimeSensitive:
-          type: string
-          example: Yes
-    DiscountArray:
-      type: array
-      items: 
-        $ref: '#/components/schemas/Discount'
