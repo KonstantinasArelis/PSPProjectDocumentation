@@ -703,3 +703,27 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Reservation'
+    Organisation:
+      type: object
+      properties:
+        ID:
+          type: number
+          format: int64
+          example: 29
+        Name:
+          type: string
+          example: "Example Organisation"
+        CreationDateTime:
+          type: string
+          format: date-time
+        Status:
+          type: string
+          enum: 
+            - Active
+            - Inactive
+          example: "Active"
+    
+    OrganisationArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Organisation'
