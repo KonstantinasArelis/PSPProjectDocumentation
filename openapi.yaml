@@ -521,6 +521,69 @@ paths:
       responses:
         '200':
           description: Reservation deleted successfully
+
+  /availability/general:
+    get:
+      tags:
+        - reservation
+      summary: Get available times for reservations in general
+      responses:
+        '200':
+          description: A list of available times
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: ["10:00 AM", "11:00 AM", "1:00 PM"]
+
+  /availability/organisation/{organisationId}:
+    get:
+      tags:
+        - reservation
+      parameters:
+        - name: organisationId
+          in: path
+          description: The ID of the organisation
+          required: true
+          schema:
+            type: string
+      summary: Get available times for reservations at a specific organisation
+      responses:
+        '200':
+          description: A list of available times for the organisation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: ["9:00 AM", "12:00 PM", "3:00 PM"]
+
+  /availability/employee/{employeeId}:
+    get:
+      tags:
+        - reservation
+      parameters:
+        - name: employeeId
+          in: path
+          description: The ID of the employee
+          required: true
+          schema:
+            type: string
+      summary: Get available times for reservations for a specific employee
+      responses:
+        '200':
+          description: A list of available times for the employee
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: ["11:00 AM", "2:00 PM", "4:00 PM"]
+
   /organisation:
     post:
       tags:
@@ -691,6 +754,36 @@ components:
           type: number
           format: int64
           example: 50
+        Hourly:
+          type: boolean
+          example: true
+        Daily:
+          type: boolean
+          example: false
+        Weekly:
+          type: boolean
+          example: true
+        Monthly:
+          type: boolean
+          example: false
+        Annually:
+          type: boolean
+          example: true
+        Minute:
+          type: string
+          example: "30"
+        Hour:
+          type: string
+          example: "2"
+        Day(Month):
+          type: string
+          example: "15"
+        Month:
+          type: string
+          example: "March"
+        Day(Week):
+          type: string
+          example: "Monday"
     EmployeeArray:
       type: array
       items:
