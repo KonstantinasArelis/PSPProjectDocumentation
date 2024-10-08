@@ -442,6 +442,84 @@ paths:
       responses:
         200:
           description: Successful operation
+          
+  /reservation:
+    post:
+      tags:
+        - reservation
+      summary: Create a reservation
+      requestBody:
+        description: A reservation object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reservation'
+        required: true
+      responses:
+        '200':
+          description: Reservation created successfully
+    
+    put:
+      tags:
+        - reservation
+      summary: Update a reservation
+      requestBody:
+        description: A reservation object to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reservation'
+        required: true
+      responses:
+        '200':
+          description: Reservation updated successfully
+
+    get:
+      tags:
+        - reservation
+      summary: Get all reservations
+      responses:
+        '200':
+          description: A list of reservations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationArray'
+
+  /reservation/{ReservationId}:
+    get:
+      tags:
+        - reservation
+      summary: Get a reservation by ID
+      parameters:
+        - name: ReservationId
+          in: path
+          description: Reservation ID to fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Reservation object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+
+    delete:
+      tags:
+        - reservation
+      summary: Delete a reservation by ID
+      parameters:
+        - name: ReservationId
+          in: path
+          description: Reservation ID to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Reservation deleted successfully
 components:
   schemas:
     Order:
@@ -599,21 +677,19 @@ components:
           example: 27
         ReservationName:
           type: string
-          example: "Meeting Room A"
+          example: Meeting Room A
         CustomerName:
           type: string
-          example: "John Doe"
+          example: John Doe
         CreationDateTime:
           type: string
           format: date-time
         StartTime:
           type: string
           format: date-time
-          example: 2024-11-18 12:30
         EndTime:
           type: string
           format: date-time
-          example: 2024-11-17 14:45
         AssignedEmployee:
           type: number
           format: int64
