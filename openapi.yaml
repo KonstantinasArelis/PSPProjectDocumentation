@@ -590,3 +590,40 @@ components:
       type: array
       items: 
         $ref: '#/components/schemas/Surcharge'
+    Reservation:
+      type: object
+      properties:
+        ReservationId:
+          type: number
+          format: int64
+          example: 27
+        ReservationName:
+          type: string
+          example: "Meeting Room A"
+        CustomerName:
+          type: string
+          example: "John Doe"
+        CreationDateTime:
+          type: string
+          format: date-time
+        StartTime:
+          type: string
+          format: date-time
+          example: 2024-11-18 12:30
+        EndTime:
+          type: string
+          format: date-time
+          example: 2024-11-17 14:45
+        AssignedEmployee:
+          type: number
+          format: int64
+          example: 13
+        NotificationStatus:
+          type: string
+          enum:
+            - Sent
+            - Not sent
+    ReservationArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Reservation'
