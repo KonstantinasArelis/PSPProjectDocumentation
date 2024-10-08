@@ -520,6 +520,87 @@ paths:
       responses:
         '200':
           description: Reservation deleted successfully
+  /organisation:
+    post:
+      tags:
+        - organisation
+      summary: Create an organisation
+      requestBody:
+        description: An organisation object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organisation'
+        required: true
+      responses:
+        '200':
+          description: Organisation created successfully
+    get:
+      tags:
+        - organisation
+      summary: Get all organisations
+      responses:
+        '200':
+          description: A list of organisations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationArray'
+
+  /organisation/{organisationId}:
+    get:
+      parameters:
+        - name: organisationId
+          in: path
+          description: Finds a specific organisation by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - organisation
+      summary: Find organisation by ID
+      responses:
+        '200':
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+    put:
+      parameters:
+        - name: organisationId
+          in: path
+          description: ID of the organisation to be updated
+          required: true
+          schema:
+            type: integer
+      tags:
+        - organisation
+      summary: Update an organisation
+      requestBody:
+        description: An organisation object that is to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organisation'
+        required: true
+      responses:
+        '200':
+          description: Organisation updated successfully
+    delete:
+      parameters:
+        - name: organisationId
+          in: path
+          description: Deletes a specific organisation by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - organisation
+      summary: Delete organisation by ID
+      responses:
+        '200':
+          description: Organisation deleted successfully
 components:
   schemas:
     Order:
