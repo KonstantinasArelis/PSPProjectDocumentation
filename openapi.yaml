@@ -2,18 +2,19 @@ openapi: 3.0.3
 info:
   title: PlayStation Portable - OpenAPI 3.0
   description: |-
-    hmmmmm.
+    This is the API documentation for the system design course at Vilnius University. The creators team name is PlayStation Portable.
   version: 1.0.11
 tags:
   - name: order
   - name: employee
+  - name: permission
   - name: reservation
   - name: transaction
   - name: surcharge
   - name: tax
   - name: discount
   - name: merchant
-  - name: menu
+  - name: organisation
 paths:
   /order:
     put:
@@ -77,6 +78,25 @@ paths:
       responses:
         200:
           description: Successful operation
+  /order/{EmployeeId}:
+    get:
+      parameters:
+        - name: EmployeeId
+          in: path
+          description: Find all orders by their owner
+          required: true
+          schema:
+            type: integer
+      tags:
+        - order
+      summary: Find all orders by their owner
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderArray'
   /order/{OrderStatus}:
     get:
       parameters:
@@ -95,7 +115,556 @@ paths:
           content: 
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/OrderArray'
+  /surcharge:
+    put:
+      tags:
+        - surcharge
+      summary: Update a surcharge
+      requestBody:
+        description: A surcharge object that is to be updated.  
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Surcharge'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    post:
+      tags:
+        - surcharge
+      summary: Create a surcharge
+      requestBody:
+        description: A surcharge object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Surcharge'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    get:
+      tags:
+        - surcharge
+      summary: Get all surcharges
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurchargeArray'
+  /surcharge/{surchargeId}:
+    get:
+      parameters:
+        - name: surchargeId
+          in: path
+          description: Finds a specific surcharge by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - surcharge
+      summary: Find surcharge by ID
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Surcharge'
+    delete:
+      parameters:
+        - name: surchargeId
+          in: path
+          description: Deletes a specific surcharge by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - surcharge
+      summary: Delete surcharge by ID
+      responses:
+        200:
+          description: Successful operation
+  /surcharge/{surchargeStatus}:
+    get:
+      parameters:
+        - name: surchargeStatus
+          in: path
+          description: Finds surcharges with a status
+          required: true
+          schema:
+            type: string
+      tags:
+        - surcharge
+      summary: Find surcharges by status
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurchargeArray'
+  /discount:
+    put:
+      tags:
+        - discount
+      summary: Update a discount
+      requestBody:
+        description: A discount object that is to be updated.  
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Discount'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    post:
+      tags:
+        - discount
+      summary: Create a discount
+      requestBody:
+        description: A discount object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Discount'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    get:
+      tags:
+        - discount
+      summary: Get all discounts
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscountArray'
+  /discount/{discountId}:
+    get:
+      parameters:
+        - name: discountId
+          in: path
+          description: Finds a specific discount by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - discount
+      summary: Find discount by ID
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Discount'
+    delete:
+      parameters:
+        - name: discountId
+          in: path
+          description: Deletes a specific discount by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - discount
+      summary: Delete discount by ID
+      responses:
+        200:
+          description: Successful operation
+  /discount/{discountStatus}:
+    get:
+      parameters:
+        - name: discountStatus
+          in: path
+          description: Finds discounts with a status
+          required: true
+          schema:
+            type: string
+      tags:
+        - discount
+      summary: Find discounts by status
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscountArray'
+  /employee/{EmployeeId}:
+    get:
+      tags:
+        - employee
+      summary: Get an employee by ID (or the permissions of that employee)
+      parameters:
+        - name: EmployeeId
+          in: path
+          description: Employee ID
+          required: true
+          schema:
+            type: integer
+        - name: include
+          in: query
+          description: Get employee permissions
+          schema:
+            type: string
+            enum: [permissions] 
+      responses:
+        '200':
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Employee' 
+                  - $ref: '#/components/schemas/PermissionArray'
+                discriminator:
+                    propertyName: permissions  # Add a discriminator
+                    mapping:
+                      true: '#/components/schemas/PermissionArray'
+                      false: '#/components/schemas/Employee'
+    delete:
+      parameters:
+        - name: EmployeeId
+          in: path
+          description: Delete employee by ID
+          required: true
+          schema:
+            type: number
+      tags:
+        - employee
+      summary: Delete an employee object by Id
+      responses:
+        200:
+          description: Successful operation
+  /employee/{Status}:
+    get:
+      parameters:
+        - name: Status
+          in: path
+          description: Find employee's by status
+          required: true
+          schema:
+            type: number
+      tags:
+        - employee
+      summary: Find employee's by status
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeArray'
+  /employee/{Organisation}:
+    get:
+      parameters:
+        - name: Organisation
+          in: path
+          description: Find employee's by organisation
+          required: true
+          schema:
+            type: number
+      tags:
+        - employee
+      summary: Find employee's by organisation
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeArray'
+  /employee:
+    post:
+      tags:
+        - employee
+      summary: Create an employee
+      requestBody:
+        description: An employee object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    put:
+      tags:
+        - employee
+      summary: Update an employee
+      requestBody:
+        description: An employee object that is to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+  /permission:
+    post:
+      tags:
+        - permission
+      summary: Assign a permission
+      requestBody:
+        description: A permission object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permission'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+  /permission/{PermissionId}:
+    delete:
+      tags:
+        - permission
+      summary: Delete a permission
+      parameters:
+        - name: PermissionId
+          in: path
+          description: Delete permission
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: Successful operation
+          
+  /reservation:
+    post:
+      tags:
+        - reservation
+      summary: Create a reservation
+      requestBody:
+        description: A reservation object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reservation'
+        required: true
+      responses:
+        '200':
+          description: Reservation created successfully
+    
+    put:
+      tags:
+        - reservation
+      summary: Update a reservation
+      requestBody:
+        description: A reservation object to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reservation'
+        required: true
+      responses:
+        '200':
+          description: Reservation updated successfully
+
+    get:
+      tags:
+        - reservation
+      summary: Get all reservations
+      responses:
+        '200':
+          description: A list of reservations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationArray'
+
+  /reservation/{ReservationId}:
+    get:
+      tags:
+        - reservation
+      summary: Get a reservation by ID
+      parameters:
+        - name: ReservationId
+          in: path
+          description: Reservation ID to fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Reservation object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+
+    delete:
+      tags:
+        - reservation
+      summary: Delete a reservation by ID
+      parameters:
+        - name: ReservationId
+          in: path
+          description: Reservation ID to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Reservation deleted successfully
+
+  /availability/general:
+    get:
+      tags:
+        - reservation
+      summary: Get available times for reservations in general
+      responses:
+        '200':
+          description: A list of available times
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: ["10:00 AM", "11:00 AM", "1:00 PM"]
+
+  /availability/organisation/{organisationId}:
+    get:
+      tags:
+        - reservation
+      parameters:
+        - name: organisationId
+          in: path
+          description: The ID of the organisation
+          required: true
+          schema:
+            type: string
+      summary: Get available times for reservations at a specific organisation
+      responses:
+        '200':
+          description: A list of available times for the organisation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: ["9:00 AM", "12:00 PM", "3:00 PM"]
+
+  /availability/employee/{employeeId}:
+    get:
+      tags:
+        - reservation
+      parameters:
+        - name: employeeId
+          in: path
+          description: The ID of the employee
+          required: true
+          schema:
+            type: string
+      summary: Get available times for reservations for a specific employee
+      responses:
+        '200':
+          description: A list of available times for the employee
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: ["11:00 AM", "2:00 PM", "4:00 PM"]
+
+  /organisation:
+    post:
+      tags:
+        - organisation
+      summary: Create an organisation
+      requestBody:
+        description: An organisation object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organisation'
+        required: true
+      responses:
+        '200':
+          description: Organisation created successfully
+    get:
+      tags:
+        - organisation
+      summary: Get all organisations
+      responses:
+        '200':
+          description: A list of organisations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationArray'
+
+  /organisation/{organisationId}:
+    get:
+      tags:
+        - organisation
+      parameters:
+        - name: organisationId
+          in: path
+          description: Finds a specific organisation by its ID
+          required: true
+          schema:
+            type: integer
+      summary: Find organisation by ID
+      responses:
+        '200':
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+    put:
+      tags:
+        - organisation
+      parameters:
+        - name: organisationId
+          in: path
+          description: ID of the organisation to be updated
+          required: true
+          schema:
+            type: integer
+      summary: Update an organisation
+      requestBody:
+        description: An organisation object that is to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organisation'
+        required: true
+      responses:
+        '200':
+          description: Organisation updated successfully
+    delete:
+      tags:
+        - organisation
+      parameters:
+        - name: organisationId
+          in: path
+          description: Deletes a specific organisation by its ID
+          required: true
+          schema:
+            type: integer
+      summary: Delete organisation by ID
+      responses:
+        '200':
+          description: Organisation deleted successfully
   /menu:
     get:
       tags:
@@ -344,6 +913,210 @@ components:
         OrderType:
           type: string
           example: Dine in
+    OrderArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Order'
+    Discount:
+      type: object
+      properties:
+        DiscountId:
+          type: number
+          format: int64
+          example: 10
+        Name:
+          type: string
+          example: special October offer
+        Value:
+          type: number
+          example: 7.1
+        Type:
+          type: string
+          example: Percentage
+        CreationDateTime:
+          type: string
+          format: date-time
+        Status:
+          type: string
+          example: Active
+        TimeSensitive:
+          type: string
+          example: Yes
+    Employee:
+      type: object
+      properties:
+        EmployeeId:
+          type: number
+          format: int64
+          example: 30
+        Name:
+          type: string
+          example: John
+        Role:
+          type: string
+          example: Cook
+        CreationDateTime:
+          type: string
+          example: 20024-20-08 08:24
+        Status:
+          type: string
+          example: Active
+        Password:
+          type: string
+          example: 1234
+        Organisation:
+          type: number
+          format: int64
+          example: 50
+        Hourly:
+          type: boolean
+          example: true
+        Daily:
+          type: boolean
+          example: false
+        Weekly:
+          type: boolean
+          example: true
+        Monthly:
+          type: boolean
+          example: false
+        Annually:
+          type: boolean
+          example: true
+        Minute:
+          type: string
+          example: "30"
+        Hour:
+          type: string
+          example: "2"
+        Day(Month):
+          type: string
+          example: "15"
+        Month:
+          type: string
+          example: "March"
+        Day(Week):
+          type: string
+          example: "Monday"
+    EmployeeArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Employee'
+    Permission:
+      type: object
+      properties:
+        PermissionId:
+          type: number
+          format: int64
+          example: 40
+        PermissionTemplateId:
+          type: number
+          format: int64
+          example: 50
+        EmployeeId:
+          type: number
+          format: int64
+          example: 50
+        CreationDateTime:
+          type: string
+          example: 20024-20-08 08:59
+    PermissionArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Permission'
+    DiscountArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Discount'
+    Surcharge:
+      type: object
+      properties:
+        SurchargeId:
+          type: number
+          format: int64
+          example: 10
+        Name:
+          type: string
+          example: surcharge1
+        Value:
+          type: number
+          example: 7.1
+        Type:
+          type: string
+          example: Percentage
+        CreationDateTime:
+          type: string
+          format: date-time
+        Status:
+          type: string
+          example: Active
+        TimeSensitive:
+          type: string
+          example: Yes
+    SurchargeArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Surcharge'
+    Reservation:
+      type: object
+      properties:
+        ReservationId:
+          type: number
+          format: int64
+          example: 27
+        ReservationName:
+          type: string
+          example: Meeting Room A
+        CustomerName:
+          type: string
+          example: John Doe
+        CreationDateTime:
+          type: string
+          format: date-time
+        StartTime:
+          type: string
+          format: date-time
+        EndTime:
+          type: string
+          format: date-time
+        AssignedEmployee:
+          type: number
+          format: int64
+          example: 13
+        NotificationStatus:
+          type: string
+          enum:
+            - Sent
+            - Not sent
+    ReservationArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Reservation'
+    Organisation:
+      type: object
+      properties:
+        ID:
+          type: number
+          format: int64
+          example: 29
+        Name:
+          type: string
+          example: "Example Organisation"
+        CreationDateTime:
+          type: string
+          format: date-time
+        Status:
+          type: string
+          enum: 
+            - Active
+            - Inactive
+          example: "Active"
+    
+    OrganisationArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Organisation'
+        
     Menu:
       type: object
       properties:
@@ -400,6 +1173,3 @@ components:
           type: string
           format: time
           example: 18:00:00
-
-
-        
