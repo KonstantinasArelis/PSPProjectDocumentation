@@ -665,6 +665,220 @@ paths:
       responses:
         '200':
           description: Organisation deleted successfully
+  /menu:
+    get:
+      tags:
+        - menu
+      summary: Find all menu items
+      responses:
+        '200':
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Menu'
+        '404':
+          description: Menu items not found
+  /menu/item:
+    put:
+      tags: 
+        - menu
+      summary: Update a menu item
+      requestBody:
+        description: Update a menu item by id
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Menu'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Menu'
+        '400':
+          description: Invalid input
+        '404':
+          description: Menu item not found
+        '422':
+          description: Validation exception
+    post:
+      tags: 
+        - menu
+      summary: Create a menu item
+      requestBody:
+        description: Add a new menu item to a menu
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Menu'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Menu'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+  /menu/item/{menuItemId}:
+    get:
+      parameters:
+        - name: menuItemId
+          in: path
+          description: Finds a specific menu item by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - menu
+      summary: Find order by ID
+      responses:
+        '200':
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Menu'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Menu item not found
+    delete:
+      parameters:
+        - name: menuItemId
+          in: path
+          description: Deletes a specific menu item by its ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - menu
+      summary: Delete menu item by ID
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Menu item not found
+  /menu/item/{Status}:
+    get:
+      parameters:
+        - name: Status
+          in: path
+          description: Finds menu items by their status
+          required: true
+          schema:
+            type: string
+      tags:
+        - menu
+      summary: Find menu items by status
+      responses:
+        '200':
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Menu'
+        '400':
+          description: Invalid status supplied
+        '404':
+          description: Menu items not found
+  /merchant:
+    put:
+      tags: 
+        - merchant
+      summary: Update merchant information
+      requestBody:
+        description: Update mercahnat information by a merchant's id
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Merchant'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchant'
+        '400':
+          description: Invalid input
+        '404':
+          description: Merchant not found
+          
+    post:
+      tags: 
+        - merchant
+      summary: Create a merchant
+      requestBody:
+        description: Add a new merchant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Merchant'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchant'
+        '400':
+          description: Invalid input
+  /merchant/{merchantId}:
+    get:
+      parameters:
+        - name: merchantId
+          in: path
+          description: Finds a specific merchant by ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - merchant
+      summary: Find merchant by ID
+      responses:
+        '200':
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchant'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Merchant not found
+    delete:
+      parameters:
+        - name: merchantId
+          in: path
+          description: Deletes a specific merchant by ID
+          required: true
+          schema:
+            type: integer
+      tags:
+        - merchant
+      summary: Delete merchant by ID
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Merchant item not found  
 components:
   schemas:
     Order:
@@ -902,3 +1116,60 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Organisation'
+        
+    Menu:
+      type: object
+      properties:
+        MenuItemId:
+          type: number
+          format: int64
+          example: 3
+        Name:
+          type: string
+          example: Chips
+        Price:
+          type: number
+          example: 2.99
+        AmountLeft:
+          type: number
+          format: int64
+          example: 15
+        SetLimit:
+          type: string
+          example: No
+        Status:
+          type: string
+          example: Active
+    Merchant:
+      type: object
+      properties:
+        MerchantId:
+          type: number
+          format: int64
+          example: 4
+        DisplayName:
+          type: string
+          example: Some Pretty Name
+        LegalName:
+          type: string
+          example: Joseph Joestar
+        Address:
+          type: string
+          example: 18455 S Figueroa St, Gardena CA 90248-4503
+        Email:
+          type: string
+          example: joseph.joestar@starCo.com
+        MainPhone:
+          type: string
+          example: (863) 773-5067
+        SecondaryPhone:
+          type: string
+          example: (765) 273-5707
+        OpeningHour:
+          type: string
+          format: time
+          example: 09:00:00
+        ClosingHour:
+          type: string
+          format: time
+          example: 18:00:00
