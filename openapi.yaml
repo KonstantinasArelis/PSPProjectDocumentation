@@ -14,7 +14,6 @@ tags:
   - name: tax
   - name: discount
   - name: merchant
-  - name: organisation
 paths:
   /order:
     put:
@@ -584,13 +583,13 @@ paths:
                   type: string
                   example: ["11:00 AM", "2:00 PM", "4:00 PM"]
 
-  /organisation:
+  /merchant:
     post:
       tags:
-        - organisation
-      summary: Create an organisation
+        - merchant
+      summary: Create an merchant
       requestBody:
-        description: An organisation object that is to be created.
+        description: A merchant object that is to be created.
         content:
           application/json:
             schema:
@@ -598,10 +597,10 @@ paths:
         required: true
       responses:
         '200':
-          description: Organisation created successfully
+          description: merchant created successfully
     get:
       tags:
-        - organisation
+        - merchant
       summary: Get all organisations
       responses:
         '200':
@@ -609,62 +608,62 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrganisationArray'
+                $ref: '#/components/schemas/merchantArray'
 
-  /organisation/{organisationId}:
+  /merchant/{merchantId}:
     get:
       tags:
-        - organisation
+        - merchant
       parameters:
-        - name: organisationId
+        - name: merchantId
           in: path
-          description: Finds a specific organisation by its ID
+          description: Finds a specific merchant by its ID
           required: true
           schema:
             type: integer
-      summary: Find organisation by ID
+      summary: Find merchant by ID
       responses:
         '200':
           description: Successful operation
           content: 
             application/json:
               schema:
-                $ref: '#/components/schemas/Organisation'
+                $ref: '#/components/schemas/merchant'
     put:
       tags:
-        - organisation
+        - merchant
       parameters:
-        - name: organisationId
+        - name: merchantId
           in: path
-          description: ID of the organisation to be updated
+          description: ID of the merchant to be updated
           required: true
           schema:
             type: integer
-      summary: Update an organisation
+      summary: Update a merchant
       requestBody:
-        description: An organisation object that is to be updated.
+        description: A merchant object that is to be updated.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Organisation'
+              $ref: '#/components/schemas/merchant'
         required: true
       responses:
         '200':
-          description: Organisation updated successfully
+          description: merchant updated successfully
     delete:
       tags:
-        - organisation
+        - merchant
       parameters:
-        - name: organisationId
+        - name: merchantId
           in: path
-          description: Deletes a specific organisation by its ID
+          description: Deletes a specific merchant by its ID
           required: true
           schema:
             type: integer
-      summary: Delete organisation by ID
+      summary: Delete merchant by ID
       responses:
         '200':
-          description: Organisation deleted successfully
+          description: merchant deleted successfully
   /menu:
     get:
       tags:
@@ -794,91 +793,6 @@ paths:
           description: Invalid status supplied
         '404':
           description: Menu items not found
-  /merchant:
-    put:
-      tags: 
-        - merchant
-      summary: Update merchant information
-      requestBody:
-        description: Update mercahnat information by a merchant's id
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Merchant'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Merchant'
-        '400':
-          description: Invalid input
-        '404':
-          description: Merchant not found
-          
-    post:
-      tags: 
-        - merchant
-      summary: Create a merchant
-      requestBody:
-        description: Add a new merchant
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Merchant'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Merchant'
-        '400':
-          description: Invalid input
-  /merchant/{merchantId}:
-    get:
-      parameters:
-        - name: merchantId
-          in: path
-          description: Finds a specific merchant by ID
-          required: true
-          schema:
-            type: integer
-      tags:
-        - merchant
-      summary: Find merchant by ID
-      responses:
-        '200':
-          description: Successful operation
-          content: 
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Merchant'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Merchant not found
-    delete:
-      parameters:
-        - name: merchantId
-          in: path
-          description: Deletes a specific merchant by ID
-          required: true
-          schema:
-            type: integer
-      tags:
-        - merchant
-      summary: Delete merchant by ID
-      responses:
-        '200':
-          description: Successful operation
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Merchant item not found  
 components:
   schemas:
     Order:
@@ -1112,10 +1026,10 @@ components:
             - Inactive
           example: "Active"
     
-    OrganisationArray:
+    merchantArray:
       type: array
       items:
-        $ref: '#/components/schemas/Organisation'
+        $ref: '#/components/schemas/merchant'
         
     Menu:
       type: object
@@ -1140,7 +1054,7 @@ components:
         Status:
           type: string
           example: Active
-    Merchant:
+    merchant:
       type: object
       properties:
         MerchantId:
