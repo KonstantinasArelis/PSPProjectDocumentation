@@ -793,6 +793,79 @@ paths:
           description: Invalid status supplied
         '404':
           description: Menu items not found
+  /tax:
+    put:
+      tags:
+        - tax
+      summary: Update a tax
+      requestBody:
+        description: Tax object that is to be updated.  
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tax'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    post:
+      tags:
+        - tax
+      summary: Create a tax
+      requestBody:
+        description: Tax object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tax'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    get:
+      tags:
+        - tax
+      summary: Get all taxes
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxArray'
+  /tax/{taxId}:
+    get:
+      parameters:
+        - name: taxId
+          in: path
+          description: Finds a specific tax by its Id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - tax
+      summary: Find tax by Id
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+    delete:
+      parameters:
+        - name: taxId
+          in: path
+          description: Deletes a specific tax by its Id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - discount
+      summary: Delete tax by ID
+      responses:
+        200:
+          description: Successful operation
 components:
   schemas:
     Order:
@@ -856,6 +929,50 @@ components:
         TimeSensitive:
           type: string
           example: Yes
+    TaxArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Tax'
+    Tax:
+      type: object
+      properties:
+        TaxId:
+          type: number
+          format: int64
+          example: 17
+        Name:
+          type: string
+          example: VAT tax
+        Value:
+          type: number
+          example: 21.1
+        Type:
+          type: string
+          example: "Percentage"
+        CreationDateTime:
+          type: string
+          format: date-time
+        Status:
+          type: string
+          example: "Active"
+        TimeSensitive:
+          type: string
+          example: Yes
+        Minute:
+          type: string
+          example: "21"
+        Hour:
+          type: string
+          example: "5"
+        Day(Month):
+          type: string
+          example: "17"
+        Month:
+          type: string
+          example: "September"
+        Day(Week):
+          type: string
+          example: "Tuesday"
     Employee:
       type: object
       properties:
@@ -871,7 +988,7 @@ components:
           example: Cook
         CreationDateTime:
           type: string
-          example: 20024-20-08 08:24
+          example: 2024-20-08 08:24
         Status:
           type: string
           example: Active
