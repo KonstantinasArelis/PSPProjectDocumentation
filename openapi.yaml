@@ -115,6 +115,106 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderArray'
+  /transaction:
+    put:
+      tags:
+        - transaction
+      summary: Update an transaction
+      requestBody:
+        description: Transaction that is going to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    post:
+      tags:
+        - transaction
+      summary: Create an transaction
+      requestBody:
+        description: Transaction that is going to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+  /transaction/{transactionId}:
+    get:
+      parameters:
+        - name: transactionId
+          in: path
+          description: Finds a specific transaction by its Id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - transaction
+      summary: Find transaction by Id
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+    delete:
+      parameters:
+        - name: transactionId
+          in: path
+          description: Deletes a specific transaction by its Id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - transaction
+      summary: Delete transaction by Id
+      responses:
+        200:
+          description: Successful operation
+  /transaction/{EmployeeId}:
+    get:
+      parameters:
+        - name: EmployeeId
+          in: path
+          description: Find all transactions by their owner
+          required: true
+          schema:
+            type: integer
+      tags:
+        - transaction
+      summary: Find all transactions by their owner
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionsArray'
+  /transaction/{TransactionStatus}:
+    get:
+      parameters:
+        - name: TransactionStatus
+          in: path
+          description: Finds transaction with a the given status
+          required: true
+          schema:
+            type: string
+      tags:
+        - transaction
+      summary: Find transaction by status
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionsArray'
   /surcharge:
     put:
       tags:
@@ -861,8 +961,8 @@ paths:
           schema:
             type: integer
       tags:
-        - discount
-      summary: Delete tax by ID
+        - tax
+      summary: Delete tax by Id
       responses:
         200:
           description: Successful operation
@@ -973,6 +1073,36 @@ components:
         Day(Week):
           type: string
           example: "Tuesday"
+    TransactionsArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Transaction'
+    Transaction:
+      type: object
+      properties:
+        TransactionId:
+          type: number
+          format: int64
+          example: 122
+        TransactionOrderId:
+          type: number
+          format: int64
+          example: 43
+        CreationDateTime:
+          type: string
+          format: date-time
+        TransactionType:
+          type: string
+          example:
+        Amount:
+          type: number
+          example: 21.1
+        Status:
+          type: string
+          example: "Batched out"
+        Currency:
+          type: string
+          example: "Eur"
     Employee:
       type: object
       properties:
