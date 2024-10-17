@@ -177,25 +177,6 @@ paths:
       responses:
         200:
           description: Successful operation
-  /transaction/{EmployeeId}:
-    get:
-      parameters:
-        - name: EmployeeId
-          in: path
-          description: Find all transactions by their owner
-          required: true
-          schema:
-            type: integer
-      tags:
-        - transaction
-      summary: Find all transactions by their owner
-      responses:
-        200:
-          description: Successful operation
-          content: 
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TransactionsArray'
   /transaction/{TransactionStatus}:
     get:
       parameters:
