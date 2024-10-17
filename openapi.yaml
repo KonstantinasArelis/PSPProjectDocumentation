@@ -44,6 +44,18 @@ paths:
       responses:
         '200':
           description: Successful operation
+  /order/:
+    get:
+      tags:
+        - order
+      summary: Get all orders
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderArray'
   /order/{orderId}:
     get:
       parameters:
@@ -493,6 +505,17 @@ paths:
       responses:
         '200':
           description: Successful operation
+    get:
+      tags:
+        - employee
+      summary: Get all employee's
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeArray'
   /permission:
     post:
       tags:
@@ -1080,7 +1103,7 @@ components:
           example: 21.1
         Status:
           type: string
-          example: "Batched out"
+          example: "Completed"
         Currency:
           type: string
           example: "Eur"
