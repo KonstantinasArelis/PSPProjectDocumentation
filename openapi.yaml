@@ -14,7 +14,6 @@ tags:
   - name: tax
   - name: discount
   - name: merchant
-  - name: organisation
 paths:
   /order:
     put:
@@ -31,6 +30,12 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Invalid request
+        '404':
+          description: Order not found
+        '422':
+          description: Validation exception
     post:
       tags:
         - order
@@ -45,10 +50,28 @@ paths:
       responses:
         '200':
           description: Successful operation
-  /order/{orderId}:
+        '400':
+          description: Invalid request
+        '422':
+          description: Validation exception
+  /order/:
+    get:
+      tags:
+        - order
+      summary: Get all orders
+      responses:
+        '200':
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderArray'
+        '404':
+          description: Orders not found
+  /order/{OrderId}:
     get:
       parameters:
-        - name: orderId
+        - name: OrderId
           in: path
           description: Finds a specific order by its ID
           required: true
@@ -58,15 +81,21 @@ paths:
         - order
       summary: Find order by ID
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid request
+        '404':
+          description: Order not found
+        '422':
+          description: Invalid OrderId supplied
     delete:
       parameters:
-        - name: orderId
+        - name: OrderId
           in: path
           description: Deletes a specific order by its ID
           required: true
@@ -76,8 +105,14 @@ paths:
         - order
       summary: Delete order by ID
       responses:
-        200:
+        '200':
           description: Successful operation
+        '400':
+          description: Invalid request
+        '404':
+          description: Order not found
+        '422':
+          description: Invalid OrderId supplied
   /order/{EmployeeId}:
     get:
       parameters:
@@ -91,12 +126,18 @@ paths:
         - order
       summary: Find all orders by their owner
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderArray'
+        '400':
+          description: Invalid request
+        '404':
+          description: Orders not found
+        '422':
+          description: Invalid EmployeeId supplied
   /order/{OrderStatus}:
     get:
       parameters:
@@ -110,12 +151,99 @@ paths:
         - order
       summary: Find orders by status
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderArray'
+        '400':
+          description: Invalid request
+        '404':
+          description: Orders not found
+        '422':
+          description: Invalid Status supplied                
+  /transaction:
+    put:
+      tags:
+        - transaction
+      summary: Update an transaction
+      requestBody:
+        description: Transaction that is going to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    post:
+      tags:
+        - transaction
+      summary: Create an transaction
+      requestBody:
+        description: Transaction that is going to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+  /transaction/{transactionId}:
+    get:
+      parameters:
+        - name: transactionId
+          in: path
+          description: Finds a specific transaction by its Id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - transaction
+      summary: Find transaction by Id
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+    delete:
+      parameters:
+        - name: transactionId
+          in: path
+          description: Deletes a specific transaction by its Id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - transaction
+      summary: Delete transaction by Id
+      responses:
+        200:
+          description: Successful operation
+  /transaction/{TransactionStatus}:
+    get:
+      parameters:
+        - name: TransactionStatus
+          in: path
+          description: Finds transaction with a the given status
+          required: true
+          schema:
+            type: string
+      tags:
+        - transaction
+      summary: Find transaction by status
+      responses:
+        200:
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionsArray'
   /surcharge:
     put:
       tags:
@@ -332,6 +460,12 @@ paths:
                     mapping:
                       true: '#/components/schemas/PermissionArray'
                       false: '#/components/schemas/Employee'
+        '400':
+          description: Invalid request
+        '404':
+          description: Employee not found
+        '422':
+          description: Invalid EmployeeId supplied
     delete:
       parameters:
         - name: EmployeeId
@@ -344,8 +478,14 @@ paths:
         - employee
       summary: Delete an employee object by Id
       responses:
-        200:
+        '200':
           description: Successful operation
+        '400':
+          description: Invalid request
+        '404':
+          description: Employee not found
+        '422':
+          description: Invalid EmployeeId supplied          
   /employee/{Status}:
     get:
       parameters:
@@ -359,12 +499,18 @@ paths:
         - employee
       summary: Find employee's by status
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
               schema:
                 $ref: '#/components/schemas/EmployeeArray'
+        '400':
+          description: Invalid request
+        '404':
+          description: Employees not found
+        '422':
+          description: Invalid Status supplied      
   /employee/{Organisation}:
     get:
       parameters:
@@ -376,14 +522,20 @@ paths:
             type: number
       tags:
         - employee
-      summary: Find employee's by organisation
+      summary: Find employees by organisation
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
               schema:
                 $ref: '#/components/schemas/EmployeeArray'
+        '400':
+          description: Invalid request
+        '404':
+          description: Employees not found
+        '422':
+          description: Invalid Organisation supplied                    
   /employee:
     post:
       tags:
@@ -399,6 +551,10 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Invalid request
+        '422':
+          description: Validation exception          
     put:
       tags:
         - employee
@@ -413,6 +569,25 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Invalid request
+        '404':
+          description: Employee not found
+        '422':
+          description: Validation exception          
+    get:
+      tags:
+        - employee
+      summary: Get all employees
+      responses:
+        '200':
+          description: Successful operation
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeArray'
+        '404':
+          description: Employees not found                      
   /permission:
     post:
       tags:
@@ -428,6 +603,9 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Invalid request          
+    
   /permission/{PermissionId}:
     delete:
       tags:
@@ -441,9 +619,14 @@ paths:
           schema:
             type: number
       responses:
-        200:
+        '200':
           description: Successful operation
-          
+        '400':
+          description: Invalid request
+        '404':
+          description: Permission not found
+        '422':
+          description: Invalid PermissionId supplied              
   /reservation:
     post:
       tags:
@@ -584,87 +767,115 @@ paths:
                   type: string
                   example: ["11:00 AM", "2:00 PM", "4:00 PM"]
 
-  /organisation:
+  /merchant:
     post:
       tags:
-        - organisation
-      summary: Create an organisation
+        - merchant
+      summary: Create a merchant
       requestBody:
-        description: An organisation object that is to be created.
+        description: A merchant object that is to be created.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Organisation'
+              $ref: '#/components/schemas/Merchant'
         required: true
       responses:
         '200':
-          description: Organisation created successfully
+          description: Merchant created successfully
+        '400':
+          description: Invalid request
+        '422':
+          description: Validation exception
     get:
       tags:
-        - organisation
-      summary: Get all organisations
+        - merchant
+      summary: Get all merchants
       responses:
         '200':
           description: A list of organisations
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrganisationArray'
+                $ref: '#/components/schemas/MerchantArray'
+        '404':
+          description: Merchants not found
 
-  /organisation/{organisationId}:
+  /merchant/{merchantId}:
     get:
       tags:
-        - organisation
+        - merchant
       parameters:
-        - name: organisationId
+        - name: merchantId
           in: path
-          description: Finds a specific organisation by its ID
+          description: Finds a specific merchant by its ID
           required: true
           schema:
             type: integer
-      summary: Find organisation by ID
+      summary: Find merchant by ID
       responses:
         '200':
           description: Successful operation
           content: 
             application/json:
               schema:
-                $ref: '#/components/schemas/Organisation'
+                $ref: '#/components/schemas/Merchant'
+        '400':
+          description: Invalid request
+        '404':
+          description: Merchant not found
+        '422':
+          description: Invalid merchantId supplied
     put:
       tags:
-        - organisation
+        - merchant
       parameters:
-        - name: organisationId
+        - name: merchantId
           in: path
-          description: ID of the organisation to be updated
+          description: ID of the merchant to be updated
           required: true
           schema:
             type: integer
-      summary: Update an organisation
+      summary: Update a merchant
       requestBody:
-        description: An organisation object that is to be updated.
+        description: A merchant object that is to be updated.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Organisation'
+              $ref: '#/components/schemas/Merchant'
         required: true
       responses:
         '200':
-          description: Organisation updated successfully
+          description: merchant updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchant'
+        '400':
+          description: Invalid request
+        '404':
+          description: Merchant not found
+        '422':
+          description: Validation exception
     delete:
       tags:
-        - organisation
+        - merchant
       parameters:
-        - name: organisationId
+        - name: merchantId
           in: path
-          description: Deletes a specific organisation by its ID
+          description: Deletes a specific merchant by its ID
           required: true
           schema:
             type: integer
-      summary: Delete organisation by ID
+      summary: Delete merchant by ID
       responses:
         '200':
-          description: Organisation deleted successfully
+          description: Merchant deleted successfully
+        '400':
+          description: Invalid request
+        '404':
+          description: Merchant not found
+        '422':
+          description: Invalid merchantId supplied
   /menu:
     get:
       tags:
@@ -701,7 +912,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Menu'
         '400':
-          description: Invalid input
+          description: Invalid request
         '404':
           description: Menu item not found
         '422':
@@ -725,13 +936,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Menu'
         '400':
-          description: Invalid input
+          description: Invalid request
         '422':
           description: Validation exception
-  /menu/item/{menuItemId}:
+  /menu/item/{MenuItemId}:
     get:
       parameters:
-        - name: menuItemId
+        - name: MenuItemId
           in: path
           description: Finds a specific menu item by its ID
           required: true
@@ -748,12 +959,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/Menu'
         '400':
-          description: Invalid ID supplied
+          description: Invalid request
         '404':
           description: Menu item not found
+        '422':
+          description: Invalid MenuItemId supplied
     delete:
       parameters:
-        - name: menuItemId
+        - name: MenuItemId
           in: path
           description: Deletes a specific menu item by its ID
           required: true
@@ -766,9 +979,11 @@ paths:
         '200':
           description: Successful operation
         '400':
-          description: Invalid ID supplied
+          description: Invalid request
         '404':
           description: Menu item not found
+        '422':
+          description: Invalid MenuItemId supplied
   /menu/item/{Status}:
     get:
       parameters:
@@ -791,94 +1006,84 @@ paths:
                 items:
                   $ref: '#/components/schemas/Menu'
         '400':
-          description: Invalid status supplied
+          description: Invalid request
         '404':
           description: Menu items not found
-  /merchant:
+        '422':
+          description: Invalid Status supplied
+  /tax:
     put:
-      tags: 
-        - merchant
-      summary: Update merchant information
-      requestBody:
-        description: Update mercahnat information by a merchant's id
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Merchant'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Merchant'
-        '400':
-          description: Invalid input
-        '404':
-          description: Merchant not found
-          
-    post:
-      tags: 
-        - merchant
-      summary: Create a merchant
-      requestBody:
-        description: Add a new merchant
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Merchant'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Merchant'
-        '400':
-          description: Invalid input
-  /merchant/{merchantId}:
-    get:
-      parameters:
-        - name: merchantId
-          in: path
-          description: Finds a specific merchant by ID
-          required: true
-          schema:
-            type: integer
       tags:
-        - merchant
-      summary: Find merchant by ID
+        - tax
+      summary: Update a tax
+      requestBody:
+        description: Tax object that is to be updated.  
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tax'
+        required: true
       responses:
         '200':
+          description: Successful operation
+    post:
+      tags:
+        - tax
+      summary: Create a tax
+      requestBody:
+        description: Tax object that is to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tax'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+    get:
+      tags:
+        - tax
+      summary: Get all taxes
+      responses:
+        200:
           description: Successful operation
           content: 
             application/json:
               schema:
-                $ref: '#/components/schemas/Merchant'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Merchant not found
-    delete:
+                $ref: '#/components/schemas/TaxArray'
+  /tax/{taxId}:
+    get:
       parameters:
-        - name: merchantId
+        - name: taxId
           in: path
-          description: Deletes a specific merchant by ID
+          description: Finds a specific tax by its Id
           required: true
           schema:
             type: integer
       tags:
-        - merchant
-      summary: Delete merchant by ID
+        - tax
+      summary: Find tax by Id
       responses:
-        '200':
+        200:
           description: Successful operation
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Merchant item not found  
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+    delete:
+      parameters:
+        - name: taxId
+          in: path
+          description: Deletes a specific tax by its Id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - tax
+      summary: Delete tax by Id
+      responses:
+        200:
+          description: Successful operation
 components:
   schemas:
     Order:
@@ -942,6 +1147,80 @@ components:
         TimeSensitive:
           type: string
           example: Yes
+    TaxArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Tax'
+    Tax:
+      type: object
+      properties:
+        TaxId:
+          type: number
+          format: int64
+          example: 17
+        Name:
+          type: string
+          example: VAT tax
+        Value:
+          type: number
+          example: 21.1
+        Type:
+          type: string
+          example: "Percentage"
+        CreationDateTime:
+          type: string
+          format: date-time
+        Status:
+          type: string
+          example: "Active"
+        TimeSensitive:
+          type: string
+          example: Yes
+        Minute:
+          type: string
+          example: "21"
+        Hour:
+          type: string
+          example: "5"
+        Day(Month):
+          type: string
+          example: "17"
+        Month:
+          type: string
+          example: "September"
+        Day(Week):
+          type: string
+          example: "Tuesday"
+    TransactionsArray:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Transaction'
+    Transaction:
+      type: object
+      properties:
+        TransactionId:
+          type: number
+          format: int64
+          example: 122
+        TransactionOrderId:
+          type: number
+          format: int64
+          example: 43
+        CreationDateTime:
+          type: string
+          format: date-time
+        TransactionType:
+          type: string
+          example:
+        Amount:
+          type: number
+          example: 21.1
+        Status:
+          type: string
+          example: "Completed"
+        Currency:
+          type: string
+          example: "Eur"
     Employee:
       type: object
       properties:
@@ -957,7 +1236,7 @@ components:
           example: Cook
         CreationDateTime:
           type: string
-          example: 20024-20-08 08:24
+          example: 2024-20-08 08:24
         Status:
           type: string
           example: Active
@@ -1092,31 +1371,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Reservation'
-    Organisation:
-      type: object
-      properties:
-        ID:
-          type: number
-          format: int64
-          example: 29
-        Name:
-          type: string
-          example: "Example Organisation"
-        CreationDateTime:
-          type: string
-          format: date-time
-        Status:
-          type: string
-          enum: 
-            - Active
-            - Inactive
-          example: "Active"
-    
-    OrganisationArray:
+    MerchantArray:
       type: array
       items:
-        $ref: '#/components/schemas/Organisation'
-        
+        $ref: '#/components/schemas/Merchant'
     Menu:
       type: object
       properties:
@@ -1173,3 +1431,7 @@ components:
           type: string
           format: time
           example: 18:00:00
+        BatchOutTime:
+          type: string
+          format: time
+          example: 00:00:00
