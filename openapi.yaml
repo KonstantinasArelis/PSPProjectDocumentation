@@ -660,9 +660,25 @@ paths:
               $ref: '#/components/schemas/Reservation'
         required: true
       responses:
-        '200':
+        '201':
           description: Reservation created successfully
-    
+          headers:
+            Location:
+              description: URL of the newly created resource
+              schema:
+                type: string
+        '400':
+          description: Bad request - Invalid reservation data
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
     put:
       tags:
         - reservation
@@ -677,7 +693,20 @@ paths:
       responses:
         '200':
           description: Reservation updated successfully
-
+        '400':
+          description: Bad request - Invalid reservation data
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '404':
+          description: Reservation not found
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
     get:
       tags:
         - reservation
@@ -689,7 +718,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReservationArray'
-
+        '304':
+          description: Not modified
+        '400':
+          description: Bad request - Invalid parameters
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
   /reservation/{ReservationId}:
     get:
       tags:
@@ -1452,10 +1494,6 @@ components:
             - Active
             - Inactive
           example: Active
-    MenuArray:
-      type: array
-      items:
-        $ref: '#/components/schemas/Menu'
     Merchant:
       type: object
       properties:
