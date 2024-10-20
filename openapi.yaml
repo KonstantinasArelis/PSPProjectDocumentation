@@ -263,6 +263,8 @@ paths:
           description: Surcharge does not exist
         '422':
           description: Invalid object in the request body
+        '500': 
+          description: Server error
     post:
       tags:
         - surcharge
@@ -279,6 +281,8 @@ paths:
           description: Successful operation
         '422':
           description: Invalid object in the request body
+        '500': 
+          description: Server error
     get:
       tags:
         - surcharge
@@ -290,6 +294,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SurchargeArray'
+        '500': 
+          description: Server error
   /surcharge/{surchargeId}:
     get:
       parameters:
@@ -311,6 +317,8 @@ paths:
                 $ref: '#/components/schemas/Surcharge'
         '404': 
           description: Surcharge does not exist
+        '500': 
+          description: Server error
     delete:
       parameters:
         - name: surchargeId
@@ -327,6 +335,8 @@ paths:
           description: Successful operation
         '404': 
           description: Surcharge does not exist
+        '500': 
+          description: Server error
   /surcharge/{surchargeStatus}:
     get:
       parameters:
@@ -346,6 +356,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SurchargeArray'
+        '500': 
+          description: Server error
   /discount:
     put:
       tags:
@@ -365,6 +377,8 @@ paths:
           description: Discount does not exist
         '422':
           description: Invalid object in the request body
+        '500': 
+          description: Server error
     post:
       tags:
         - discount
@@ -381,6 +395,8 @@ paths:
           description: Successful operation
         '422':
           description: Invalid object in the request body
+        '500': 
+          description: Server error
     get:
       tags:
         - discount
@@ -392,6 +408,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DiscountArray'
+        '500': 
+          description: Server error
   /discount/{discountId}:
     get:
       parameters:
@@ -413,6 +431,8 @@ paths:
                 $ref: '#/components/schemas/Discount'
         '404': 
           description: Discount does not exist
+        '500': 
+          description: Server error
     delete:
       parameters:
         - name: discountId
@@ -429,6 +449,8 @@ paths:
           description: Successful operation
         '404': 
           description: Discount does not exist
+        '500': 
+          description: Server error
   /discount/{discountStatus}:
     get:
       parameters:
@@ -448,6 +470,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DiscountArray'
+        '500': 
+          description: Server error
   /employee/{EmployeeId}:
     get:
       tags:
