@@ -691,6 +691,10 @@ paths:
               description: URL of the newly created resource
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
         '400':
           description: Bad request - Invalid reservation data
         '401':
