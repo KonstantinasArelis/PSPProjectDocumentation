@@ -684,9 +684,25 @@ paths:
               $ref: '#/components/schemas/Reservation'
         required: true
       responses:
-        '200':
+        '201':
           description: Reservation created successfully
-    
+          headers:
+            Location:
+              description: URL of the newly created resource
+              schema:
+                type: string
+        '400':
+          description: Bad request - Invalid reservation data
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
     put:
       tags:
         - reservation
@@ -701,7 +717,20 @@ paths:
       responses:
         '200':
           description: Reservation updated successfully
-
+        '400':
+          description: Bad request - Invalid reservation data
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '404':
+          description: Reservation not found
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
     get:
       tags:
         - reservation
@@ -713,7 +742,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReservationArray'
-
+        '304':
+          description: Not modified
+        '400':
+          description: Bad request - Invalid parameters
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
   /reservation/{ReservationId}:
     get:
       tags:
@@ -728,12 +770,27 @@ paths:
             type: string
       responses:
         '200':
-          description: Reservation object
+          description: Reservation object retrieved successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Reservation'
-
+        '400':
+          description: Bad request - Invalid Reservation ID format
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '404':
+          description: Reservation not found
+        '422':
+          description: Invalid ReservationId supplied
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
     delete:
       tags:
         - reservation
@@ -746,48 +803,129 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: Reservation deleted successfully
-
-  /availability/general:
+        '204':
+          description: Reservation deleted successfully (No content)
+        '400':
+          description: Bad request - Invalid Reservation ID format
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '404':
+          description: Reservation not found
+        '422':
+          description: Invalid ReservationId supplied
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
+  /availability/employee:
     get:
       tags:
         - reservation
-      summary: Get available times for reservations in general
+      summary: Get available times of every employee for reservations
       responses:
         '200':
-          description: A list of available times
+          description: A list of employees with their available times and affiliated organisation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: string
-                  example: ["10:00 AM", "11:00 AM", "1:00 PM"]
-
-  /availability/organisation/{organisationId}:
+                  type: object
+                  properties:
+                    employeeId:
+                      type: number
+                      format: int64
+                      example: 30
+                    employeeName:
+                      type: string
+                      example: "John Doe"
+                    organisationId:
+                      type: number
+                      format: int64
+                      example: 50
+                    organisationName:
+                      type: string
+                      example: "Some Pretty Name"
+                    availableTimes:
+                      type: array
+                      items:
+                        type: string
+                        example: "10:00 AM"
+        '400':
+          description: Bad request - Invalid parameters provided
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '404':
+          description: Not found - No availability found
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
+  /availability/merchant/{MerchantId}:
     get:
       tags:
         - reservation
       parameters:
-        - name: organisationId
+        - name: MerchantId
           in: path
-          description: The ID of the organisation
+          description: The ID of the merchant/organisation
           required: true
           schema:
             type: string
-      summary: Get available times for reservations at a specific organisation
+      summary: Get available times for reservations at a specific organisation of every employee there
       responses:
         '200':
-          description: A list of available times for the organisation
+          description: A list of employees and their available times for the organisation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: string
-                  example: ["9:00 AM", "12:00 PM", "3:00 PM"]
-
+                  type: object
+                  properties:
+                    employeeId:
+                      type: number
+                      format: int64
+                      example: 30
+                    employeeName:
+                      type: string
+                      example: "John Doe"
+                    availableTimes:
+                      type: array
+                      items:
+                        type: string
+                        example: "9:00 AM"
+                  example:
+                    - employeeId: 30
+                      employeeName: "John Doe"
+                      availableTimes: ["9:00 AM", "12:00 PM", "3:00 PM"]
+                    - employeeId: 31
+                      employeeName: "Jane Smith"
+                      availableTimes: ["10:00 AM", "1:00 PM", "4:00 PM"]
+        '400':
+          description: Bad request - Invalid MerchantId or parameters provided
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '404':
+          description: Not found - No availability found for the specified organisation
+        '422':
+          description: Invalid MerchantId supplied
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway - Invalid response from the upstream server
+        '503':
+          description: Service unavailable - Server temporarily overloaded or down for maintenance
   /availability/employee/{employeeId}:
     get:
       tags:
@@ -810,7 +948,22 @@ paths:
                 items:
                   type: string
                   example: ["11:00 AM", "2:00 PM", "4:00 PM"]
-
+        '400':
+          description: Bad request - Invalid employeeId or parameters provided
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission to view this employee's availability
+        '404':
+          description: Not found - Employee not found or no available times for the specified employee
+        '422':
+          description: Invalid EmployeeId supplied
+        '500':
+          description: Internal server error - An unexpected error occurred
+        '502':
+          description: Bad gateway - Invalid response from the upstream server
+        '503':
+          description: Service unavailable - The service is temporarily overloaded or under maintenance
   /merchant:
     post:
       tags:
@@ -843,7 +996,6 @@ paths:
                 $ref: '#/components/schemas/MerchantArray'
         '404':
           description: Merchants not found
-
   /merchant/{merchantId}:
     get:
       tags:
@@ -1146,22 +1298,25 @@ components:
           example: 5
         OrderStatus:
           type: string
-          example: open
+          enum:
+            - Open
+            - Closed
+            - PartialRefund
+            - FullRefund
+          example: Open
         Tip:
           type: number
           example: 6.4
-        ReceiptStatus:
-          type: string
-          example: printed
-        customerName:
-          type: string
-          example: John
         TableName:
           type: string
           example: By the window
         OrderType:
           type: string
-          example: Dine in
+          enum:
+            - DineIn
+            - TakeOut
+            - PickUp
+          example: DineIn
     OrderArray:
       type: array
       items: 
@@ -1181,12 +1336,18 @@ components:
           example: 7.1
         Type:
           type: string
+          enum:
+            - Percentage
+            - Value
           example: Percentage
         CreationDateTime:
           type: string
           format: date-time
         Status:
           type: string
+          enum:
+            - Active
+            - Inactive
           example: Active
         TimeSensitive:
           type: string
@@ -1210,12 +1371,18 @@ components:
           example: 21.1
         Type:
           type: string
+          enum:
+            - Percentage
+            - Value
           example: "Percentage"
         CreationDateTime:
           type: string
           format: date-time
         Status:
           type: string
+          enum:
+            - Active
+            - Inactive
           example: "Active"
         TimeSensitive:
           type: string
@@ -1261,6 +1428,11 @@ components:
           example: 21.1
         Status:
           type: string
+          enum:
+            - Completed
+            - Pending
+            - Refunded
+            - Declined
           example: "Completed"
         Currency:
           type: string
@@ -1277,13 +1449,19 @@ components:
           example: John
         Role:
           type: string
-          example: Cook
+          enum:
+            - Owner
+            - Employee
+          example: Owner
         CreationDateTime:
           type: string
           example: 2024-20-08 08:24
         Status:
           type: string
-          example: Active
+          enum:
+            - Active
+            - Inactive
+          example: Inactive
         Password:
           type: string
           example: 1234
@@ -1366,12 +1544,18 @@ components:
           example: 7.1
         Type:
           type: string
+          enum:
+            - Percentage
+            - Value
           example: Percentage
         CreationDateTime:
           type: string
           format: date-time
         Status:
           type: string
+          enum:
+            - Active
+            - Inactive
           example: Active
         TimeSensitive:
           type: string
@@ -1409,16 +1593,12 @@ components:
         NotificationStatus:
           type: string
           enum:
-            - Sent
-            - Not sent
+            - sent
+            - not sent
     ReservationArray:
       type: array
       items:
         $ref: '#/components/schemas/Reservation'
-    MerchantArray:
-      type: array
-      items:
-        $ref: '#/components/schemas/Merchant'
     Menu:
       type: object
       properties:
@@ -1438,9 +1618,15 @@ components:
           example: 15
         SetLimit:
           type: string
+          enum:
+            - Yes
+            - No
           example: No
         Status:
           type: string
+          enum:
+            - Active
+            - Inactive
           example: Active
     Merchant:
       type: object
@@ -1479,3 +1665,7 @@ components:
           type: string
           format: time
           example: 00:00:00
+    MerchantArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Merchant'
