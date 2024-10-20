@@ -746,12 +746,25 @@ paths:
             type: string
       responses:
         '200':
-          description: Reservation object
+          description: Reservation object retrieved successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Reservation'
-
+        '400':
+          description: Bad request - Invalid Reservation ID format
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '404':
+          description: Reservation not found
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
     delete:
       tags:
         - reservation
@@ -764,9 +777,22 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: Reservation deleted successfully
-
+        '204':
+          description: Reservation deleted successfully (No content)
+        '400':
+          description: Bad request - Invalid Reservation ID format
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission
+        '404':
+          description: Reservation not found
+        '500':
+          description: Internal server error
+        '502':
+          description: Bad gateway
+        '503':
+          description: Service unavailable
   /availability/general:
     get:
       tags:
@@ -782,7 +808,6 @@ paths:
                 items:
                   type: string
                   example: ["10:00 AM", "11:00 AM", "1:00 PM"]
-
   /availability/merchant/{MerchantId}:
     get:
       tags:
@@ -805,7 +830,6 @@ paths:
                 items:
                   type: string
                   example: ["9:00 AM", "12:00 PM", "3:00 PM"]
-
   /availability/employee/{employeeId}:
     get:
       tags:
@@ -828,7 +852,6 @@ paths:
                 items:
                   type: string
                   example: ["11:00 AM", "2:00 PM", "4:00 PM"]
-
   /merchant:
     post:
       tags:
@@ -861,7 +884,6 @@ paths:
                 $ref: '#/components/schemas/MerchantArray'
         '404':
           description: Merchants not found
-
   /merchant/{merchantId}:
     get:
       tags:
