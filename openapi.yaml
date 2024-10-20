@@ -221,8 +221,12 @@ paths:
               $ref: '#/components/schemas/Surcharge'
         required: true
       responses:
-        '200':
+        200:
           description: Successful operation
+        404:
+          description: Surcharge does not exist
+        422:
+          description: Invalid object in the request body
     post:
       tags:
         - surcharge
@@ -235,8 +239,10 @@ paths:
               $ref: '#/components/schemas/Surcharge'
         required: true
       responses:
-        '200':
+        200:
           description: Successful operation
+        422:
+          description: Invalid object in the request body
     get:
       tags:
         - surcharge
@@ -267,6 +273,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Surcharge'
+        404: 
+          description: Surcharge does not exist
     delete:
       parameters:
         - name: surchargeId
@@ -281,6 +289,8 @@ paths:
       responses:
         200:
           description: Successful operation
+        404: 
+          description: Surcharge does not exist
   /surcharge/{surchargeStatus}:
     get:
       parameters:
@@ -313,8 +323,12 @@ paths:
               $ref: '#/components/schemas/Discount'
         required: true
       responses:
-        '200':
+        200:
           description: Successful operation
+        404: 
+          description: Discount does not exist
+        422:
+          description: Invalid object in the request body
     post:
       tags:
         - discount
@@ -327,8 +341,10 @@ paths:
               $ref: '#/components/schemas/Discount'
         required: true
       responses:
-        '200':
+        200:
           description: Successful operation
+        422:
+          description: Invalid object in the request body
     get:
       tags:
         - discount
@@ -359,6 +375,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Discount'
+        404: 
+          description: Discount does not exist
     delete:
       parameters:
         - name: discountId
@@ -373,6 +391,8 @@ paths:
       responses:
         200:
           description: Successful operation
+        404: 
+          description: Discount does not exist
   /discount/{discountStatus}:
     get:
       parameters:
@@ -1184,7 +1204,7 @@ components:
           example: 50
         CreationDateTime:
           type: string
-          example: 20024-20-08 08:59
+          example: 2024-20-08 08:59
     PermissionArray:
       type: array
       items:
