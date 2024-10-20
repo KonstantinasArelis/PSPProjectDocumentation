@@ -167,7 +167,7 @@ paths:
     put:
       tags:
         - transaction
-      summary: Update an transaction
+      summary: Update a transaction
       requestBody:
         description: Transaction that is going to be updated
         content:
@@ -178,10 +178,16 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Bad request. Invalid data supplied.
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal server error
     post:
       tags:
         - transaction
-      summary: Create an transaction
+      summary: Create a transaction
       requestBody:
         description: Transaction that is going to be created
         content:
@@ -192,6 +198,13 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Bad request. Invalid data supplied.
+        '409':
+          description: Conflict. Transaction already exists.
+        '500':
+          description: Internal server error
+  
   /transaction/{transactionId}:
     get:
       parameters:
@@ -211,6 +224,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Invalid transaction ID supplied
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal server error
     delete:
       parameters:
         - name: transactionId
@@ -225,12 +244,19 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Invalid transaction ID supplied
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal server error
+  
   /transaction/{TransactionStatus}:
     get:
       parameters:
         - name: TransactionStatus
           in: path
-          description: Finds transaction with a the given status
+          description: Finds transaction with the given status
           required: true
           schema:
             type: string
@@ -244,6 +270,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TransactionsArray'
+        '400':
+          description: Invalid status supplied
+        '404':
+          description: No transactions found with the given status
+        '500':
+          description: Internal server error
+
   /surcharge:
     put:
       tags:
@@ -1226,6 +1259,12 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Bad request. Invalid data supplied.
+        '404':
+          description: Tax not found
+        '500':
+          description: Internal server error
     post:
       tags:
         - tax
@@ -1240,6 +1279,11 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Bad request. Invalid data supplied.
+        '500':
+          description: Internal server error
+
     get:
       tags:
         - tax
@@ -1251,6 +1295,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TaxArray'
+        '500':
+          description: Internal server error
   /tax/{taxId}:
     get:
       parameters:
@@ -1270,6 +1316,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tax'
+        '400':
+          description: Invalid tax ID supplied
+        '404':
+          description: Tax not found
+        '500':
+          description: Internal server error
     delete:
       parameters:
         - name: taxId
@@ -1284,6 +1336,12 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Invalid tax ID supplied
+        '404':
+          description: Tax not found
+        '500':
+          description: Internal server error
 components:
   schemas:
     Order:
