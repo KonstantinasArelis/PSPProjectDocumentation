@@ -205,7 +205,7 @@ paths:
         - transaction
       summary: Find transaction by Id
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -223,7 +223,7 @@ paths:
         - transaction
       summary: Delete transaction by Id
       responses:
-        200:
+        '200':
           description: Successful operation
   /transaction/{TransactionStatus}:
     get:
@@ -238,7 +238,7 @@ paths:
         - transaction
       summary: Find transaction by status
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -259,6 +259,10 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '404':
+          description: Surcharge does not exist
+        '422':
+          description: Invalid object in the request body
     post:
       tags:
         - surcharge
@@ -273,12 +277,14 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '422':
+          description: Invalid object in the request body
     get:
       tags:
         - surcharge
       summary: Get all surcharges
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -297,12 +303,14 @@ paths:
         - surcharge
       summary: Find surcharge by ID
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
               schema:
                 $ref: '#/components/schemas/Surcharge'
+        '404': 
+          description: Surcharge does not exist
     delete:
       parameters:
         - name: surchargeId
@@ -315,8 +323,10 @@ paths:
         - surcharge
       summary: Delete surcharge by ID
       responses:
-        200:
+        '200':
           description: Successful operation
+        '404': 
+          description: Surcharge does not exist
   /surcharge/{surchargeStatus}:
     get:
       parameters:
@@ -330,7 +340,7 @@ paths:
         - surcharge
       summary: Find surcharges by status
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -351,6 +361,10 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '404': 
+          description: Discount does not exist
+        '422':
+          description: Invalid object in the request body
     post:
       tags:
         - discount
@@ -365,12 +379,14 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '422':
+          description: Invalid object in the request body
     get:
       tags:
         - discount
       summary: Get all discounts
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -389,12 +405,14 @@ paths:
         - discount
       summary: Find discount by ID
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
               schema:
                 $ref: '#/components/schemas/Discount'
+        '404': 
+          description: Discount does not exist
     delete:
       parameters:
         - name: discountId
@@ -407,8 +425,10 @@ paths:
         - discount
       summary: Delete discount by ID
       responses:
-        200:
+        '200':
           description: Successful operation
+        '404': 
+          description: Discount does not exist
   /discount/{discountStatus}:
     get:
       parameters:
@@ -422,7 +442,7 @@ paths:
         - discount
       summary: Find discounts by status
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -1045,7 +1065,7 @@ paths:
         - tax
       summary: Get all taxes
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -1064,7 +1084,7 @@ paths:
         - tax
       summary: Find tax by Id
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -1082,7 +1102,7 @@ paths:
         - tax
       summary: Delete tax by Id
       responses:
-        200:
+        '200':
           description: Successful operation
 components:
   schemas:
@@ -1298,7 +1318,7 @@ components:
           example: 50
         CreationDateTime:
           type: string
-          example: 20024-20-08 08:59
+          example: 2024-20-08 08:59
     PermissionArray:
       type: array
       items:
