@@ -894,6 +894,8 @@ paths:
           description: Forbidden - User does not have permission
         '404':
           description: Not found - No availability found for the specified organisation
+        '422':
+          description: Invalid MerchantId supplied
         '500':
           description: Internal server error
         '502':
@@ -922,6 +924,22 @@ paths:
                 items:
                   type: string
                   example: ["11:00 AM", "2:00 PM", "4:00 PM"]
+        '400':
+          description: Bad request - Invalid employeeId or parameters provided
+        '401':
+          description: Unauthorized - Authentication required
+        '403':
+          description: Forbidden - User does not have permission to view this employee's availability
+        '404':
+          description: Not found - Employee not found or no available times for the specified employee
+        '422':
+          description: Invalid EmployeeId supplied
+        '500':
+          description: Internal server error - An unexpected error occurred
+        '502':
+          description: Bad gateway - Invalid response from the upstream server
+        '503':
+          description: Service unavailable - The service is temporarily overloaded or under maintenance
   /merchant:
     post:
       tags:
