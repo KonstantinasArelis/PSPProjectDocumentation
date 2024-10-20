@@ -50,7 +50,7 @@ paths:
         - order
       summary: Get all orders
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -69,7 +69,7 @@ paths:
         - order
       summary: Find order by ID
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -87,7 +87,7 @@ paths:
         - order
       summary: Delete order by ID
       responses:
-        200:
+        '200':
           description: Successful operation
   /order/{EmployeeId}:
     get:
@@ -102,7 +102,7 @@ paths:
         - order
       summary: Find all orders by their owner
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -121,7 +121,7 @@ paths:
         - order
       summary: Find orders by status
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -169,7 +169,7 @@ paths:
         - transaction
       summary: Find transaction by Id
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -187,7 +187,7 @@ paths:
         - transaction
       summary: Delete transaction by Id
       responses:
-        200:
+        '200':
           description: Successful operation
   /transaction/{TransactionStatus}:
     get:
@@ -202,7 +202,7 @@ paths:
         - transaction
       summary: Find transaction by status
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -221,11 +221,11 @@ paths:
               $ref: '#/components/schemas/Surcharge'
         required: true
       responses:
-        200:
+        '200':
           description: Successful operation
-        404:
+        '404':
           description: Surcharge does not exist
-        422:
+        '422':
           description: Invalid object in the request body
     post:
       tags:
@@ -239,16 +239,16 @@ paths:
               $ref: '#/components/schemas/Surcharge'
         required: true
       responses:
-        200:
+        '200':
           description: Successful operation
-        422:
+        '422':
           description: Invalid object in the request body
     get:
       tags:
         - surcharge
       summary: Get all surcharges
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -267,13 +267,13 @@ paths:
         - surcharge
       summary: Find surcharge by ID
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
               schema:
                 $ref: '#/components/schemas/Surcharge'
-        404: 
+        '404': 
           description: Surcharge does not exist
     delete:
       parameters:
@@ -287,9 +287,9 @@ paths:
         - surcharge
       summary: Delete surcharge by ID
       responses:
-        200:
+        '200':
           description: Successful operation
-        404: 
+        '404': 
           description: Surcharge does not exist
   /surcharge/{surchargeStatus}:
     get:
@@ -304,7 +304,7 @@ paths:
         - surcharge
       summary: Find surcharges by status
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -323,11 +323,11 @@ paths:
               $ref: '#/components/schemas/Discount'
         required: true
       responses:
-        200:
+        '200':
           description: Successful operation
-        404: 
+        '404': 
           description: Discount does not exist
-        422:
+        '422':
           description: Invalid object in the request body
     post:
       tags:
@@ -341,16 +341,16 @@ paths:
               $ref: '#/components/schemas/Discount'
         required: true
       responses:
-        200:
+        '200':
           description: Successful operation
-        422:
+        '422':
           description: Invalid object in the request body
     get:
       tags:
         - discount
       summary: Get all discounts
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -369,13 +369,13 @@ paths:
         - discount
       summary: Find discount by ID
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
               schema:
                 $ref: '#/components/schemas/Discount'
-        404: 
+        '404': 
           description: Discount does not exist
     delete:
       parameters:
@@ -389,9 +389,9 @@ paths:
         - discount
       summary: Delete discount by ID
       responses:
-        200:
+        '200':
           description: Successful operation
-        404: 
+        '404': 
           description: Discount does not exist
   /discount/{discountStatus}:
     get:
@@ -406,7 +406,7 @@ paths:
         - discount
       summary: Find discounts by status
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -456,7 +456,7 @@ paths:
         - employee
       summary: Delete an employee object by Id
       responses:
-        200:
+        '200':
           description: Successful operation
   /employee/{Status}:
     get:
@@ -471,7 +471,7 @@ paths:
         - employee
       summary: Find employee's by status
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -490,7 +490,7 @@ paths:
         - employee
       summary: Find employee's by organisation
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -530,7 +530,7 @@ paths:
         - employee
       summary: Get all employee's
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -564,7 +564,7 @@ paths:
           schema:
             type: number
       responses:
-        200:
+        '200':
           description: Successful operation
           
   /reservation:
@@ -951,7 +951,7 @@ paths:
         - tax
       summary: Get all taxes
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -970,7 +970,7 @@ paths:
         - tax
       summary: Find tax by Id
       responses:
-        200:
+        '200':
           description: Successful operation
           content: 
             application/json:
@@ -988,7 +988,7 @@ paths:
         - tax
       summary: Delete tax by Id
       responses:
-        200:
+        '200':
           description: Successful operation
 components:
   schemas:
