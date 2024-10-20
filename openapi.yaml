@@ -741,14 +741,14 @@ paths:
                   type: string
                   example: ["10:00 AM", "11:00 AM", "1:00 PM"]
 
-  /availability/organisation/{organisationId}:
+  /availability/merchant/{MerchantId}:
     get:
       tags:
         - reservation
       parameters:
-        - name: organisationId
+        - name: MerchantId
           in: path
-          description: The ID of the organisation
+          description: The ID of the merchant/organisation
           required: true
           schema:
             type: string
@@ -1122,22 +1122,25 @@ components:
           example: 5
         OrderStatus:
           type: string
-          example: open
+          enum:
+            - Open
+            - Closed
+            - PartialRefund
+            - FullRefund
+          example: Open
         Tip:
           type: number
           example: 6.4
-        ReceiptStatus:
-          type: string
-          example: printed
-        customerName:
-          type: string
-          example: John
         TableName:
           type: string
           example: By the window
         OrderType:
           type: string
-          example: Dine in
+          enum:
+            - DineIn
+            - TakeOut
+            - PickUp
+          example: DineIn
     OrderArray:
       type: array
       items: 
@@ -1157,12 +1160,18 @@ components:
           example: 7.1
         Type:
           type: string
+          enum:
+            - Percentage
+            - Value
           example: Percentage
         CreationDateTime:
           type: string
           format: date-time
         Status:
           type: string
+          enum:
+            - Active
+            - Inactive
           example: Active
         TimeSensitive:
           type: string
@@ -1186,12 +1195,18 @@ components:
           example: 21.1
         Type:
           type: string
+          enum:
+            - Percentage
+            - Value
           example: "Percentage"
         CreationDateTime:
           type: string
           format: date-time
         Status:
           type: string
+          enum:
+            - Active
+            - Inactive
           example: "Active"
         TimeSensitive:
           type: string
@@ -1237,6 +1252,11 @@ components:
           example: 21.1
         Status:
           type: string
+          enum:
+            - Completed
+            - Pending
+            - Refunded
+            - Declined
           example: "Completed"
         Currency:
           type: string
@@ -1253,13 +1273,19 @@ components:
           example: John
         Role:
           type: string
-          example: Cook
+          enum:
+            - Owner
+            - Employee
+          example: Owner
         CreationDateTime:
           type: string
           example: 2024-20-08 08:24
         Status:
           type: string
-          example: Active
+          enum:
+            - Active
+            - Inactive
+          example: Inactive
         Password:
           type: string
           example: 1234
@@ -1342,12 +1368,18 @@ components:
           example: 7.1
         Type:
           type: string
+          enum:
+            - Percentage
+            - Value
           example: Percentage
         CreationDateTime:
           type: string
           format: date-time
         Status:
           type: string
+          enum:
+            - Active
+            - Inactive
           example: Active
         TimeSensitive:
           type: string
@@ -1385,16 +1417,12 @@ components:
         NotificationStatus:
           type: string
           enum:
-            - Sent
-            - Not sent
+            - sent
+            - not sent
     ReservationArray:
       type: array
       items:
         $ref: '#/components/schemas/Reservation'
-    MerchantArray:
-      type: array
-      items:
-        $ref: '#/components/schemas/Merchant'
     Menu:
       type: object
       properties:
@@ -1414,10 +1442,20 @@ components:
           example: 15
         SetLimit:
           type: string
+          enum:
+            - Yes
+            - No
           example: No
         Status:
           type: string
+          enum:
+            - Active
+            - Inactive
           example: Active
+    MenuArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Menu'
     Merchant:
       type: object
       properties:
@@ -1455,3 +1493,7 @@ components:
           type: string
           format: time
           example: 00:00:00
+    MerchantArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Merchant'
